@@ -20,3 +20,4 @@
 ---
 include:
   - board: ortho48v2
+    snippet: studio-rpc-usb-uart
