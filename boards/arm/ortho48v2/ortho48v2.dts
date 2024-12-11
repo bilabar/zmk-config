@@ -1,9 +1,5 @@
-// This file was generated from a template. Edit it to match your keyboard.
-// See https://docs.zephyrproject.org/3.5.0/hardware/porting/board_porting.html
-// and https://zmk.dev/docs/development/hardware-integration/new-shield for more
-// instructions.
-
 /dts-v1/;
+#include <rpi_pico/rp2040.dtsi>
 #include <dt-bindings/zmk/matrix_transform.h>
 
 #include "ortho48v2-pinctrl.dtsi"
@@ -18,6 +14,12 @@
 
     chosen {
         zmk,physical-layout = &layout_ortho_4x12_all1u;
+    };
+
+    xtal_clk: xtal-clk {
+        compatible = "fixed-clock";
+        clock-frequency = <12000000>;
+        #clock-cells = <0>;
     };
 
     kscan: kscan {
@@ -57,8 +59,8 @@
 
     encoder: encoder {
         compatible = "alps,ec11";
-        a-gpios = <&gpiob 28 GPIO_PULL_UP>;
-        b-gpios = <&gpiob 29 GPIO_PULL_UP>;
+        a-gpios = <&gpio0 28 GPIO_PULL_UP>;
+        b-gpios = <&gpio0 29 GPIO_PULL_UP>;
         steps = <80>;
         status = "disabled";
     };
@@ -108,6 +110,8 @@
         >;
     };
 };
+
+
 
 &layout_ortho_4x12_all1u {
     transform = <&layout_grid_transform>;
