@@ -2,8 +2,6 @@
 #include <rpi_pico/rp2040.dtsi>
 #include <dt-bindings/zmk/matrix_transform.h>
 
-#include "ortho48v2-pinctrl.dtsi"
-
 #include <layouts/common/ortho_4x12/1x2u.dtsi>
 #include <layouts/common/ortho_4x12/2x2u.dtsi>
 #include <layouts/common/ortho_4x12/all1u.dtsi>
@@ -13,6 +11,10 @@
     compatible = "ortho48v2";
 
     chosen {
+        zephyr,sram = &sram0;
+        zephyr,flash = &flash0;
+        zephyr,code-partition = &code_partition;
+        zmk,kscan = &kscan0;
         zmk,physical-layout = &layout_ortho_4x12_all1u;
     };
 
@@ -22,7 +24,7 @@
         #clock-cells = <0>;
     };
 
-    kscan: kscan {
+    kscan0: kscan {
         // If the hardware does not use a switch matrix, change this to the
         // appropriate driver and update the properties below to match.
         // See https://zmk.dev/docs/config/kscan for supported key scan drivers.
@@ -111,7 +113,38 @@
     };
 };
 
+&flash0 {
+    reg = <0x10000000 DT_SIZE_M(16)>;
 
+    partitions {
+        compatible = "fixed-partitions";
+        #address-cells = <1>;
+        #size-cells = <1>;
+
+        /* Reserved memory for the second stage bootloader */
+        second_stage_bootloader: partition@0 {
+            reg = <0x00000000 0x100>;
+            read-only;
+        };
+
+        /*
+         * Usable flash. Starts at 0x100, after the bootloader. The partition
+         * size is 16MB minus the 0x100 bytes taken by the bootloader.
+         */
+        code_partition: partition@100 {
+            reg = <0x100 (DT_SIZE_M(16) - 0x100)>;
+            read-only;
+        };
+    };
+};
+
+zephyr_udc0: &usbd {
+    status = "okay";
+};
+
+&gpio0 {
+    status = "okay";
+};
 
 &layout_ortho_4x12_all1u {
     transform = <&layout_grid_transform>;

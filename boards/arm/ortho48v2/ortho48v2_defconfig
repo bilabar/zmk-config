@@ -2,7 +2,23 @@
 # See https://docs.zephyrproject.org/3.5.0/hardware/porting/board_porting.html#write-kconfig-files
 # for more information.
 
+CONFIG_SOC_SERIES_RP2XXX=y
+CONFIG_SOC_RP2040=y
 CONFIG_BOARD_ORTHO48V2=y
+
+CONFIG_SYS_CLOCK_HW_CYCLES_PER_SEC=125000000
+
+# Enable USB CDC ACM logging for debugging
+# CONFIG_ZMK_USB_LOGGING=y
+
+# Enable reset by default
+CONFIG_RESET=y
+
+# Code partition needed to target the correct flash range
+CONFIG_USE_DT_CODE_PARTITION=y
+
+# Output UF2 by default, native bootloader supports it.
+CONFIG_BUILD_OUTPUT_UF2=y
 
 # Enable GPIO
 CONFIG_GPIO=y
@@ -10,6 +26,8 @@ CONFIG_GPIO=y
 # Use pinctrl
 CONFIG_PINCTRL=y
 
-# Enable ZMK outputs
-# CONFIG_ZMK_BLE=y
 CONFIG_ZMK_USB=y
+
+# Uncomment these two lines to add support for encoder to your firmware
+#CONFIG_EC11=y
+#CONFIG_EC11_TRIGGER_OWN_THREAD=y
