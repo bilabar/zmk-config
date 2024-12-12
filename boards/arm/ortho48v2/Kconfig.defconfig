@@ -5,7 +5,7 @@
 if BOARD_ORTHO48V2
 
 config ZMK_KEYBOARD_NAME
-    default "ortho48v2"
+    default "Ortho48 v2"
 
 config RP2_FLASH_W25Q080
     default y
